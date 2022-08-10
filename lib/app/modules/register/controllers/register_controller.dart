@@ -11,7 +11,8 @@ class RegisterController extends GetxController {
   final passwordController = TextEditingController();
   final usernameController = TextEditingController();
 
-  Future<void> signUp() async {
+  Future<void> _signUp() async {
+    isLoading.value = true;
     final isFormValid = formKey.currentState!.validate();
 
     if (!isFormValid) return;
@@ -24,6 +25,8 @@ class RegisterController extends GetxController {
         .signUp(email, password, userMetadata: {'username': username});
     final error = res.error;
 
+    isLoading.value = false;
+
     if (error != null) {
       Get.snackbar("Error", error.message);
       return;
@@ -31,4 +34,8 @@ class RegisterController extends GetxController {
 
     Get.offNamed(Routes.CHAT);
   }
+
+  void toLoginCallback() => Get.toNamed(Routes.LOGIN);
+
+  void onRegisterCallback() => _signUp();
 }
